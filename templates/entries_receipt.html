@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% set active='receipt' %}
+{% block title %}Receipt Entry{% endblock %}
+{% block page_title %}📥 Receipt Entry{% endblock %}
+{% block content %}
+<div class="content-card">
+  <div class="card-header"><h3>New Receipt</h3></div>
+  <div class="card-body">
+    <form method="POST" action="{{ url_for('entries.add_receipt') }}">
+      <div class="form-grid" style="margin-bottom:20px;">
+        <div class="form-group"><label>Date *</label><input type="date" name="receipt_date" required></div>
+        <div class="form-group"><label>Received From *</label><input type="text" name="received_from" required></div>
+        <div class="form-group"><label>Flat/Shop No</label><input type="text" name="flat_no"></div>
+        <div class="form-group"><label>Building No</label><input type="text" name="building_no"></div>
+        <div class="form-group"><label>Payment Mode</label>
+          <select name="payment_mode"><option>Cash</option><option>Cheque</option><option>Bank Transfer</option></select></div>
+      </div>
+      <h4 style="margin-bottom:12px;color:var(--primary);">Particulars (Amount in ₹)</h4>
+      <div class="receipt-items-grid">
+        {% set items = [('entrance_fees','Entrance Fees'),('shares','Shares'),('deposits','Deposits'),
+          ('loan_installments','Loan Installments'),('interest_on_loan','Interest on Loan'),
+          ('interest_defaulted','Interest Defaulted Dues'),('contribution_construction','Contribution Construction'),
+          ('lease_rent','Lease Rent'),('municipal_taxes','Municipal Taxes'),('water_charges','Water Charges'),
+          ('electricity_charges','Electricity Charges'),('parking_charges','Parking Charges'),
+          ('lift_charges','Lift Charges'),('sinking_fund','Sinking Fund'),('service_charges','Service Charges'),
+          ('insurance','Insurance'),('suspense_share_capital','Suspense Share Capital & Entrance'),
+          ('donations','Donations'),('miscellaneous','Miscellaneous')] %}
+        {% for key,label in items %}
+        <div class="receipt-item">
+          <div class="ino">{{ loop.index }}</div>
+          <div class="ic"><div class="il">{{ label }}</div>
+            <input type="number" name="{{ key }}" step="0.01" value="0" class="receipt-amount-input"></div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="total-box"><span>TOTAL</span><span id="receipt-total">₹ 0.00</span></div>
+      <div class="form-group form-full" style="margin-top:16px;"><label>Narration</label>
+        <input type="text" name="narration"></div>
+      <div style="margin-top:16px;"><button type="submit" class="btn btn-primary">Save Receipt</button></div>
+    </form>
+  </div>
+</div>
+<div class="content-card">
+  <div class="card-header"><h3>Recent Receipts</h3></div>
+  <div class="card-body">
+    <table class="data-table">
+      <thead><tr><th>S.No</th><th>Date</th><th>From</th><th>Flat</th><th>Total</th><th>Mode</th><th>Action</th></tr></thead>
+      <tbody>
+      {% for r in receipts %}
+        <tr><td>{{ r.sno }}</td><td>{{ r.receipt_date }}</td><td>{{ r.received_from }}</td>
+          <td>{{ r.flat_no }}</td><td><strong>₹{{ "%.2f"|format(r.total) }}</strong></td>
+          <td>{{ r.payment_mode }}</td>
+          <td>
+            <a href="{{ url_for('entries.print_receipt', rid=r.id) }}" class="btn btn-accent btn-sm">🖨</a>
+            <a href="{{ url_for('entries.delete_receipt', rid=r.id) }}" class="btn btn-danger btn-sm delete-btn">Del</a>
+          </td></tr>
+      {% else %}<tr><td colspan="7" style="text-align:center;color:var(--muted);">No receipts yet.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

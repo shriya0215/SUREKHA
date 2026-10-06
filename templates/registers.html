@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% set active='registers' %}
+{% block title %}Registers{% endblock %}
+{% block page_title %}📁 Registers – Form {{ form_type }}{% endblock %}
+{% block content %}
+<div class="btn-group" style="margin-bottom:20px;">
+  <a href="{{ url_for('registers.registers', type='I') }}" class="btn btn-sm {% if form_type=='I' %}btn-primary{% else %}btn-outline{% endif %}">Register I</a>
+  <a href="{{ url_for('registers.registers', type='J') }}" class="btn btn-sm {% if form_type=='J' %}btn-primary{% else %}btn-outline{% endif %}">Register J</a>
+  <a href="{{ url_for('registers.registers', type='Share') }}" class="btn btn-sm {% if form_type=='Share' %}btn-primary{% else %}btn-outline{% endif %}">Share Register</a>
+  {% if form_type == 'I' %}
+    <a href="{{ url_for('registers.print_form_i') }}" class="btn btn-accent btn-sm" target="_blank">📄 View Official Form I Format</a>
+  {% elif form_type == 'J' %}
+    <a href="{{ url_for('registers.print_form_j') }}" class="btn btn-accent btn-sm" target="_blank">📄 View Official Form J Format</a>
+  {% endif %}
+</div>
+
+<div class="content-card">
+  <div class="card-header"><h3>Members Statutory {{ form_type }} Form Register</h3></div>
+  <div class="card-body">
+    <table class="data-table">
+      <thead><tr><th>#</th><th>Member Name</th><th>Flat No</th><th>Share Cert</th><th>Actions / Forms</th></tr></thead>
+      <tbody>
+      {% for m in members %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td><strong>{{ m.name }}</strong></td>
+          <td>Flat {{ m.flat_no }}</td>
+          <td>{{ m.share_cert_no }}</td>
+          <td>
+            <a href="{{ url_for('registers.print_share_cert', mid=m.id) }}" class="btn btn-accent btn-sm" target="_blank">📜 Share Certificate</a>
+            <a href="{{ url_for('registers.print_form_i') }}" class="btn btn-outline btn-sm" target="_blank">📄 Form I</a>
+            <a href="{{ url_for('registers.print_form_j') }}" class="btn btn-outline btn-sm" target="_blank">📄 Form J</a>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="5" style="text-align:center;color:var(--muted);">No members found in society.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

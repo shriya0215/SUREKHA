@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUREKHA – UML Diagrams Presentation Slides</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body { background: #0f172a; color: #1e293b; padding: 30px 20px; }
+    .slide-card {
+      background: #ffffff;
+      border-radius: 16px;
+      max-width: 1200px;
+      margin: 0 auto 50px auto;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.3);
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+    }
+    .slide-header {
+      background: linear-gradient(135deg, #0d47a1 0%, #1a237e 100%);
+      color: #ffffff;
+      padding: 18px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #f59e0b;
+    }
+    .slide-title { font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+    .slide-sub { font-size: 13px; color: #93c5fd; }
+    .slide-body { padding: 25px 30px; background: #f8fafc; }
+    
+    .diagram-container {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      overflow-x: auto;
+    }
+
+    /* 3-Column Grid for Table Cards below Diagram */
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 18px; }
+    .grid-2 { display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 20px; }
+    
+    .info-box {
+      background: #ffffff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    .info-box.yellow { border-color: #fde68a; background: #fffbeb; }
+    .info-box.blue { border-color: #bfdbfe; background: #eff6ff; }
+    .info-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #3b82f6;
+      padding-bottom: 4px;
+      display: inline-block;
+    }
+    
+    table.slide-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+    table.slide-table th {
+      background: #1e40af;
+      color: #ffffff;
+      text-align: left;
+      padding: 7px 10px;
+      font-weight: 600;
+    }
+    table.slide-table td {
+      padding: 6px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #334155;
+    }
+    table.slide-table tr:nth-child(even) { background: #f8fafc; }
+    
+    .key-points-list { list-style: none; font-size: 12px; color: #334155; }
+    .key-points-list li { margin-bottom: 8px; position: relative; padding-left: 16px; line-height: 1.4; }
+    .key-points-list li::before { content: "•"; color: #2563eb; font-weight: bold; position: absolute; left: 0; font-size: 16px; top: -2px; }
+    
+    .legend-box {
+      margin-top: 12px;
+      padding: 8px 10px;
+      background: #f1f5f9;
+      border-radius: 6px;
+      font-size: 11px;
+      color: #475569;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .badge-pk { background: #fee2e2; color: #991b1b; padding: 2px 5px; border-radius: 4px; font-weight: 700; font-size: 10px; }
+    .badge-fk { background: #dbeafe; color: #1e40af; padding: 2px 5px; border-radius: 4px; font-weight: 700; font-size: 10px; }
+  </style>
+</head>
+<body>
+
+  <!-- SLIDE 1: ER DIAGRAM -->
+  <div class="slide-card">
+    <div class="slide-header">
+      <div class="slide-title">🏢 SUREKHA Housing Management — Entity-Relationship (ER) Diagram</div>
+      <div class="slide-sub">TYCS SEM-V Mini Project</div>
+    </div>
+    <div class="slide-body">
+      <div class="diagram-container">
+        <div class="mermaid">
+        erDiagram
+          FIRM { int id PK, string firm_name, string email, string username, string password }
+          SOCIETIES { int id PK, int firm_id FK, string society_name, string register_no, int no_of_members }
+          MEMBERS { int id PK, int society_id FK, string name, string flat_no, string share_cert_no, string email }
+          RECEIPTS { int id PK, int society_id FK, string sno, string receipt_date, float total, string payment_mode }
+          BILLS { int id PK, int society_id FK, int member_id FK, string bill_no, float total_payable, int is_paid }
+          MEETINGS { int id PK, int society_id FK, string meeting_title, string meeting_date, string video_link }
+          FIRM ||--o{ SOCIETIES : "manages (1:N)"
+          SOCIETIES ||--o{ MEMBERS : "houses (1:N)"
+          SOCIETIES ||--o{ RECEIPTS : "issues (1:N)"
+          SOCIETIES ||--o{ BILLS : "bills (1:N)"
+          MEMBERS ||--o{ BILLS : "billed for (1:N)"
+          SOCIETIES ||--o{ MEETINGS : "organizes (1:N)"
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="info-box">
+          <div class="info-title">Entity Details</div>
+          <table class="slide-table">
+            <tr><th>Entity</th><th>Description</th></tr>
+            <tr><td><b>FIRM</b></td><td>Master management enterprise firm account.</td></tr>
+            <tr><td><b>SOCIETIES</b></td><td>Individual housing society registered under CHS Act.</td></tr>
+            <tr><td><b>MEMBERS</b></td><td>Resident flat owners and share certificate holders.</td></tr>
+            <tr><td><b>RECEIPTS</b></td><td>19-Item statutory collection receipts for funds.</td></tr>
+            <tr><td><b>BILLS</b></td><td>Itemized monthly maintenance bill assessments.</td></tr>
+            <tr><td><b>MEETINGS</b></td><td>General meetings and video conference links.</td></tr>
+          </table>
+        </div>
+        <div class="info-box">
+          <div class="info-title">Relationships</div>
+          <table class="slide-table">
+            <tr><th>Relationship</th><th>Entities</th><th>Cardinality</th></tr>
+            <tr><td>Manages</td><td>FIRM – SOCIETIES</td><td>1 : N</td></tr>
+            <tr><td>Houses</td><td>SOCIETIES – MEMBERS</td><td>1 : N</td></tr>
+            <tr><td>Collects</td><td>SOCIETIES – RECEIPTS</td><td>1 : N</td></tr>
+            <tr><td>Invoices</td><td>SOCIETIES – BILLS</td><td>1 : N</td></tr>
+            <tr><td>Pays</td><td>MEMBERS – BILLS</td><td>1 : N</td></tr>
+            <tr><td>Organizes</td><td>SOCIETIES – MEETINGS</td><td>1 : N</td></tr>
+          </table>
+          <div class="legend-box">
+            <span><b>Legend:</b></span>
+            <span><span class="badge-pk">PK</span> Primary Key</span>
+            <span><span class="badge-fk">FK</span> Foreign Key</span>
+            <span>1 : One</span>
+            <span>N : Many</span>
+          </div>
+        </div>
+        <div class="info-box blue">
+          <div class="info-title">Key Points</div>
+          <ul class="key-points-list">
+            <li><b>Primary Keys:</b> <code>id</code> auto-increment unique integer in all 6 entities.</li>
+            <li><b>Foreign Keys:</b> <code>firm_id</code>, <code>society_id</code>, <code>member_id</code> enforce strict referential integrity.</li>
+            <li><b>ACID Transactions:</b> Financial receipts and batch maintenance billing execute atomically in SQLite.</li>
+            <li><b>Password Masking:</b> Passwords in <code>FIRM</code> table are masked (<code>••••••••</code>) across all views.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: USE CASE DIAGRAM -->
+  <div class="slide-card">
+    <div class="slide-header">
+      <div class="slide-title">👥 SUREKHA Housing Management — Use Case Diagram</div>
+      <div class="slide-sub">TYCS SEM-V Mini Project</div>
+    </div>
+    <div class="slide-body">
+      <div class="grid-2">
+        <div class="diagram-container" style="margin-bottom:0;">
+          <div class="mermaid">
+          graph TD
+            Admin((Firm Admin))
+            Secretary((Society Secretary))
+            Member((Society Member))
+
+            subgraph "SUREKHA Housing Society Management System"
+              UC1[1. Firm Register / Login]
+              UC2[2. 2-Step Email OTP Recovery]
+              UC3[3. Manage Societies & Context]
+              UC4[4. Member Profiles Single/Joint]
+              UC5[5. Form I, Form J & Share Cert]
+              UC6[6. Record 19-Item Receipts]
+              UC7[7. Maintenance Billing & Invoices]
+              UC8[8. Schedule AGM & Video Meetings]
+              UC9[9. Broadcast Email & SMS]
+              UC10[10. Database Viewer & Admin]
+            end
+
+            Admin --> UC1
+            Admin --> UC2
+            Admin --> UC3
+            Admin --> UC4
+            Admin --> UC5
+            Admin --> UC6
+            Admin --> UC7
+            Admin --> UC8
+            Admin --> UC9
+            Admin --> UC10
+
+            Secretary --> UC4
+            Secretary --> UC6
+            Secretary --> UC8
+
+            Member -.->|Receives| UC7
+            Member -.->|Attends| UC8
+            Member -.->|Receives| UC9
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="info-box">
+            <div class="info-title">Actors</div>
+            <table class="slide-table">
+              <tr><th>Actor</th><th>Role / Description</th></tr>
+              <tr><td><b>Firm Admin</b></td><td>Super administrator managing multiple housing societies, billing, and accounting.</td></tr>
+              <tr><td><b>Society Secretary</b></td><td>Office bearer managing member records, issuing receipts, and AGM notices.</td></tr>
+              <tr><td><b>Society Member</b></td><td>Resident flat owner who receives maintenance bills, notices, and joins video meetings.</td></tr>
+            </table>
+          </div>
+          <div class="info-box yellow">
+            <div class="info-title">Key Use Case Description</div>
+            <table class="slide-table">
+              <tr><td width="35%"><b>Use Case Name</b></td><td>Generate Maintenance Bills</td></tr>
+              <tr><td><b>Actor</b></td><td>Firm Admin</td></tr>
+              <tr><td><b>Description</b></td><td>Calculates monthly maintenance assessments (₹450 maint + ₹300 repair + ₹180 parking + ₹150 NOC = ₹1080) for all members.</td></tr>
+              <tr><td><b>Pre-condition</b></td><td>Active society must be selected and members registered.</td></tr>
+              <tr><td><b>Post-condition</b></td><td>Bills stored in DB; printable invoice ready for distribution.</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: CLASS DIAGRAM -->
+  <div class="slide-card">
+    <div class="slide-header">
+      <div class="slide-title">🏛️ SUREKHA Housing Management — Class Diagram</div>
+      <div class="slide-sub">TYCS SEM-V Mini Project</div>
+    </div>
+    <div class="slide-body">
+      <div class="diagram-container">
+        <div class="mermaid">
+        classDiagram
+          class Firm {
+            +int id
+            +string firm_name
+            +string email
+            +string username
+            +string password
+            +register()
+            +login()
+            +resetPasswordViaEmail()
+          }
+          class Society {
+            +int id
+            +int firm_id
+            +string society_name
+            +string register_no
+            +int no_of_members
+            +addSociety()
+            +selectActiveSociety()
+          }
+          class Member {
+            +int id
+            +int society_id
+            +string member_type
+            +string name
+            +string flat_no
+            +string share_cert_no
+            +addMember()
+            +generateShareCert()
+          }
+          class Receipt {
+            +int id
+            +int society_id
+            +string sno
+            +string receipt_date
+            +float total
+            +saveReceipt()
+            +printReceipt()
+          }
+          class Bill {
+            +int id
+            +int society_id
+            +int member_id
+            +string bill_no
+            +float total_payable
+            +int is_paid
+            +generateBills()
+            +markPaid()
+          }
+          class Meeting {
+            +int id
+            +int society_id
+            +string meeting_title
+            +string video_link
+            +scheduleMeeting()
+            +broadcastNotices()
+          }
+          Firm "1" -- "0..*" Society : Manages
+          Society "1" -- "0..*" Member : Houses
+          Society "1" -- "0..*" Receipt : Issues
+          Member "1" -- "0..*" Bill : Billed for
+          Society "1" -- "0..*" Meeting : Organizes
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="info-box">
+          <div class="info-title">Class Summary</div>
+          <table class="slide-table">
+            <tr><th>Class</th><th>Description</th></tr>
+            <tr><td><b>Firm</b></td><td>Master management firm credentials and profile.</td></tr>
+            <tr><td><b>Society</b></td><td>Individual society profiles and registration codes.</td></tr>
+            <tr><td><b>Member</b></td><td>Flat owners, single/joint titles, and nominees.</td></tr>
+            <tr><td><b>Receipt</b></td><td>Official 19-item collection register.</td></tr>
+            <tr><td><b>Bill</b></td><td>Itemized maintenance assessment invoices.</td></tr>
+            <tr><td><b>Meeting</b></td><td>AGM/EGM schedules and video conference links.</td></tr>
+          </table>
+        </div>
+        <div class="info-box">
+          <div class="info-title">Legend & Multiplicity</div>
+          <ul class="key-points-list">
+            <li><b>Association (<code>--</code>):</b> Direct relationship between structural entities.</li>
+            <li><b>Multiplicity (<code>1</code> to <code>0..*</code>):</b> One Firm manages multiple Societies; One Society contains multiple Members.</li>
+            <li><b>Encapsulation:</b> Protected fields with public operational methods.</li>
+          </ul>
+        </div>
+        <div class="info-box blue">
+          <div class="info-title">System Information</div>
+          <table class="slide-table">
+            <tr><td><b>Project Name</b></td><td>SUREKHA Society Management</td></tr>
+            <tr><td><b>Architecture</b></td><td>Modular Blueprint MVC / MVT</td></tr>
+            <tr><td><b>Backend</b></td><td>Python 3.10+ (Flask Microframework)</td></tr>
+            <tr><td><b>Database</b></td><td>SQLite 3 (ACID Relational Engine)</td></tr>
+            <tr><td><b>Frontend</b></td><td>HTML5, Modular CSS3, Vanilla JS</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: SEQUENCE DIAGRAM -->
+  <div class="slide-card">
+    <div class="slide-header">
+      <div class="slide-title">⏱️ SUREKHA Housing Management — Sequence Diagram (Billing & Payment)</div>
+      <div class="slide-sub">TYCS SEM-V Mini Project</div>
+    </div>
+    <div class="slide-body">
+      <div class="diagram-container">
+        <div class="mermaid">
+        sequenceDiagram
+          autonumber
+          actor Admin as Firm Admin
+          participant UI as Web Browser UI
+          participant Server as Flask Backend (billing.py)
+          participant DB as SQLite DB (SUREKHA.db)
+          participant Mail as Gmail SMTP Gateway
+
+          Admin->>UI: Select Society & Click "Generate Bills"
+          UI->>Server: POST /billing/generate (Date, Mode=Auto)
+          Server->>DB: Query Billing Charges & Active Members
+          DB-->>Server: Return Member List & Rates
+          Server->>Server: Compute Breakdown (Total ₹1080)
+          Server->>DB: INSERT INTO bills (Batch Insert)
+          DB-->>Server: Commit Transaction (Success)
+          Server->>Mail: Trigger Email / SMS Alerts to Members
+          Mail-->>Server: Dispatch Acknowledged
+          Server-->>UI: Render Generated Bills Table
+          UI-->>Admin: Display Invoices & Print Preview
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="info-box">
+          <div class="info-title">Participants</div>
+          <table class="slide-table">
+            <tr><th>Participant</th><th>Description</th></tr>
+            <tr><td><b>Firm Admin</b></td><td>Initiator who triggers bill generation.</td></tr>
+            <tr><td><b>Browser UI</b></td><td>Web client rendering forms and tables.</td></tr>
+            <tr><td><b>Flask Server</b></td><td>Backend computing rate breakdowns.</td></tr>
+            <tr><td><b>SQLite DB</b></td><td>Relational persistent data store.</td></tr>
+            <tr><td><b>Gmail SMTP</b></td><td>Mail gateway sending alerts & OTPs.</td></tr>
+          </table>
+        </div>
+        <div class="info-box">
+          <div class="info-title">Messages Summary</div>
+          <table class="slide-table">
+            <tr><th>Step</th><th>Interaction</th><th>Type</th></tr>
+            <tr><td>1 - 2</td><td>Request periodic billing batch</td><td>Sync HTTP POST</td></tr>
+            <tr><td>3 - 4</td><td>Query rates & member roster</td><td>SQL Query</td></tr>
+            <tr><td>5 - 6</td><td>Calculate sums & batch insert</td><td>DB Write</td></tr>
+            <tr><td>7 - 8</td><td>Dispatch email notifications</td><td>Async Network</td></tr>
+            <tr><td>9 - 10</td><td>Render printable bill UI</td><td>HTTP 200</td></tr>
+          </table>
+        </div>
+        <div class="info-box blue">
+          <div class="info-title">Key Points</div>
+          <ul class="key-points-list">
+            <li><b>Automated Math:</b> Standard ₹450 maint, ₹300 repair, ₹180 parking, ₹150 NOC calculated server-side.</li>
+            <li><b>Transactional Safety:</b> Batch bill generation wrapped in single database commit.</li>
+            <li><b>Instant Invoice:</b> Printable bills matching standard Maharashtra format rendered immediately.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: ACTIVITY DIAGRAM -->
+  <div class="slide-card">
+    <div class="slide-header">
+      <div class="slide-title">🔄 SUREKHA Housing Management — Activity Diagram (Member Registration & Form I/J)</div>
+      <div class="slide-sub">TYCS SEM-V Mini Project</div>
+    </div>
+    <div class="slide-body">
+      <div class="grid-2">
+        <div class="diagram-container" style="margin-bottom:0;">
+          <div class="mermaid">
+          graph TD
+            Start((Start)) --> A1[Login to SUREKHA Portal]
+            A1 --> A2{Valid Credentials?}
+            A2 -- No --> A3[Show Error Message] --> A1
+            A2 -- Yes --> A4[Select Active Housing Society]
+            A4 --> B1[Open Members Module]
+            B1 --> B2[Fill Member Details & Ownership Type]
+            B2 --> B3{Valid Inputs?}
+            B3 -- No --> B4[Highlight Required Fields] --> B2
+            B3 -- Yes --> B5[Save Member to Database]
+            B5 --> C1[Auto-Generate Share Certificate]
+            C1 --> C2[Update Form I - Register of Members]
+            C2 --> C3[Update Form J - List of Members]
+            C3 --> EndNode((End / Print Ready))
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="info-box">
+            <div class="info-title">Legend</div>
+            <table class="slide-table">
+              <tr><th>Symbol</th><th>Meaning</th></tr>
+              <tr><td><b>Circle (Start/End)</b></td><td>Initial and final state of workflow.</td></tr>
+              <tr><td><b>Rectangle</b></td><td>Action / operational step executed.</td></tr>
+              <tr><td><b>Diamond</b></td><td>Decision conditional branching.</td></tr>
+            </table>
+          </div>
+          <div class="info-box yellow">
+            <div class="info-title">Key Flows in This Diagram</div>
+            <ul class="key-points-list">
+              <li><b>1. Login & Auth:</b> Authenticates user credentials and sets active society context in session.</li>
+              <li><b>2. Member Registration:</b> Captures single/joint ownership, share capital count, and nominee details.</li>
+              <li><b>3. Statutory Sync:</b> Automatically synchronizes Form I, Form J, and Share Certificate records in a single click without manual re-entry.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: DEPLOYMENT DIAGRAM -->
+  <div class="slide-card">
+    <div class="slide-header">
+      <div class="slide-title">🚀 SUREKHA Housing Management — Deployment Diagram</div>
+      <div class="slide-sub">TYCS SEM-V Mini Project</div>
+    </div>
+    <div class="slide-body">
+      <div class="diagram-container">
+        <div class="mermaid">
+        graph TD
+          subgraph "Client Tier (User Device)"
+            ClientBrowser["💻 Client Web Browser\n(Google Chrome / Edge / Firefox)\nHTML5 / CSS3 / JavaScript"]
+          end
+
+          subgraph "Application Server Tier (Host Machine)"
+            WebServer["🖥️ Python Flask WSGI Server\n(localhost:5000)\nModular Blueprints Engine"]
+            StaticAssets["📁 Static Asset Engine\n(base.css, layout.css, main.js)"]
+            Launcher["⚡ SUREKHA.bat\n1-Click Desktop Launcher"]
+          end
+
+          subgraph "Database Tier (Local Storage)"
+            DB[("🗄️ SQLite 3 Database Engine\n(SUREKHA.db)\n13 Relational Tables")]
+          end
+
+          subgraph "External Cloud Services Tier"
+            GmailSMTP["☁️ Google SMTP Mail Server\n(smtp.gmail.com:465 SSL)\nEmail OTP & Notice Broadcast"]
+            VideoService["☁️ Jitsi / Google Meet Video Engine\nOnline AGM & Remote Conferencing"]
+          end
+
+          ClientBrowser <-->|HTTP Port 5000| WebServer
+          Launcher -->|Executes & Initializes| WebServer
+          WebServer <-->|File I/O Stream| StaticAssets
+          WebServer <-->|Native SQLite Driver| DB
+          WebServer <-->|SMTP SSL Protocol| GmailSMTP
+          ClientBrowser <-->|WebRTC Stream| VideoService
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="info-box">
+          <div class="info-title">Nodes & Components</div>
+          <table class="slide-table">
+            <tr><th>Tier</th><th>Component</th></tr>
+            <tr><td><b>Client Tier</b></td><td>Browser executing HTML5/CSS3/JS UI.</td></tr>
+            <tr><td><b>Server Tier</b></td><td>Python Flask WSGI server on port 5000.</td></tr>
+            <tr><td><b>Launcher</b></td><td>Windows Batch <code>SUREKHA.bat</code> script.</td></tr>
+            <tr><td><b>Database Tier</b></td><td>SQLite embedded <code>SUREKHA.db</code> database.</td></tr>
+            <tr><td><b>Cloud Tier</b></td><td>Gmail SMTP SSL and WebRTC Video.</td></tr>
+          </table>
+        </div>
+        <div class="info-box">
+          <div class="info-title">Protocols & Ports</div>
+          <table class="slide-table">
+            <tr><th>Protocol</th><th>Port</th><th>Purpose</th></tr>
+            <tr><td><b>HTTP/TCP</b></td><td>5000</td><td>Web UI pages & AJAX API requests.</td></tr>
+            <tr><td><b>SMTP/SSL</b></td><td>465</td><td>Encrypted Email OTP dispatch.</td></tr>
+            <tr><td><b>WebRTC</b></td><td>443</td><td>Live Video AGM conferencing.</td></tr>
+            <tr><td><b>Native IPC</b></td><td>Local</td><td>Sub-millisecond SQL query execution.</td></tr>
+          </table>
+        </div>
+        <div class="info-box blue">
+          <div class="info-title">Key Deployment Points</div>
+          <ul class="key-points-list">
+            <li><b>Zero-Setup Access:</b> Access via browser without installing heavy runtime dependencies.</li>
+            <li><b>Portability:</b> Entire system self-contained in <code>SocioNest</code> folder with embedded SQLite DB.</li>
+            <li><b>Data Privacy:</b> Financial records stored locally with cloud OTP verification.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: 'default' });
+  </script>
+</body>
+</html>

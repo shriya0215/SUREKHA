@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% set active='billing' %}
+{% block title %}Billing{% endblock %}
+{% block page_title %}🧾 Maintenance Billing{% endblock %}
+{% block content %}
+<div class="content-card">
+  <div class="card-header"><h3>Billing Charges Config</h3></div>
+  <div class="card-body">
+    <form method="POST" action="{{ url_for('billing.billing_config') }}">
+      <div class="form-grid">
+        <div class="form-group"><label>Maintenance Service (₹)</label>
+          <input type="number" name="maintenance_service" value="{{ charges.maintenance_service if charges else 450 }}" step="0.01"></div>
+        <div class="form-group"><label>Repair Fund (₹)</label>
+          <input type="number" name="repair_fund" value="{{ charges.repair_fund if charges else 300 }}" step="0.01"></div>
+        <div class="form-group"><label>Car Parking (₹)</label>
+          <input type="number" name="car_parking" value="{{ charges.car_parking if charges else 180 }}" step="0.01"></div>
+        <div class="form-group"><label>NOC (₹)</label>
+          <input type="number" name="noc" value="{{ charges.noc if charges else 150 }}" step="0.01"></div>
+        <div class="form-group"><label>Billing Cycle</label>
+          <select name="billing_cycle">
+            <option {% if charges and charges.billing_cycle=='Monthly' %}selected{% endif %}>Monthly</option>
+            <option {% if charges and charges.billing_cycle=='Quarterly' %}selected{% endif %}>Quarterly</option>
+          </select></div>
+      </div>
+      <div style="margin-top:16px;"><button type="submit" class="btn btn-accent">Save Config</button></div>
+    </form>
+  </div>
+</div>
+<div class="content-card">
+  <div class="card-header"><h3>Generate Bills</h3></div>
+  <div class="card-body">
+    <form method="POST" action="{{ url_for('billing.generate_bills') }}">
+      <div class="form-grid">
+        <div class="form-group"><label>Bill Date</label><input type="date" name="bill_date" required></div>
+        <div class="form-group"><label>Period From</label><input type="date" name="period_from"></div>
+        <div class="form-group"><label>Period To</label><input type="date" name="period_to"></div>
+        <div class="form-group"><label>Mode</label>
+          <select name="mode"><option value="Auto">Auto (All Members)</option><option value="Manual">Manual</option></select></div>
+      </div>
+      <div style="margin-top:16px;"><button type="submit" class="btn btn-primary">Generate Bills</button></div>
+    </form>
+  </div>
+</div>
+<div class="content-card">
+  <div class="card-header"><h3>Generated Bills</h3></div>
+  <div class="card-body">
+    <table class="data-table">
+      <thead><tr><th>Bill No</th><th>Date</th><th>Name</th><th>Flat</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+      {% for b in bills %}
+        <tr><td>{{ b.bill_no }}</td><td>{{ b.bill_date }}</td><td>{{ b.name }}</td><td>{{ b.flat_no }}</td>
+          <td><strong>₹{{ "%.2f"|format(b.total_payable) }}</strong></td>
+          <td>{% if b.is_paid %}<span class="badge badge-success">Paid</span>{% else %}<span class="badge badge-danger">Unpaid</span>{% endif %}</td>
+          <td>
+            <a href="{{ url_for('billing.print_bill', bid=b.id) }}" class="btn btn-accent btn-sm">🖨</a>
+            {% if not b.is_paid %}<a href="{{ url_for('billing.mark_paid', bid=b.id) }}" class="btn btn-success btn-sm">✓ Paid</a>{% endif %}
+            <a href="{{ url_for('billing.delete_bill', bid=b.id) }}" class="btn btn-danger btn-sm delete-btn">Del</a>
+          </td></tr>
+      {% else %}<tr><td colspan="7" style="text-align:center;color:var(--muted);">No bills generated.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

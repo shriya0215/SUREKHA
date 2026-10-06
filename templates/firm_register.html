@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUREKHA – Firm Registration</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="auth-box" style="max-width:580px;">
+    <div class="auth-header">
+      <div class="brand">SURE<span>KHA</span></div>
+      <div class="tagline">Housing Society Management Platform</div>
+    </div>
+    <div class="auth-body">
+      <h2>🏢 Firm Registration</h2>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in messages %}
+          <div class="flash {{ cat }}">{{ msg }}</div>
+        {% endfor %}
+      {% endwith %}
+      <form method="POST">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Firm Name *</label>
+            <input type="text" name="firm_name" required>
+          </div>
+          <div class="form-group">
+            <label>Operation Type *</label>
+            <select name="operation_type" required>
+              <option value="">-- Select --</option>
+              <option value="Partnership">Partnership</option>
+              <option value="Individual">Individual</option>
+              <option value="Pvt Ltd">Pvt Ltd</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Admin / Owner Name *</label>
+            <input type="text" name="admin_name" required>
+          </div>
+          <div class="form-group">
+            <label>Contact No *</label>
+            <input type="tel" name="contact_no" required>
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label>No. of Societies (Scale)</label>
+            <input type="number" name="scale_societies" min="1">
+          </div>
+          <div class="form-group form-full">
+            <label>Address</label>
+            <textarea name="address"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Member Count Tier</label>
+            <select name="member_tier">
+              <option value="25upto">Upto 25 Members</option>
+              <option value="30upto">Upto 30 Members</option>
+              <option value="50upto">Upto 50 Members</option>
+              <option value="50above">50+ Members</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Period Start Date</label>
+            <input type="date" name="period_start">
+          </div>
+          <div class="form-group">
+            <label>Username *</label>
+            <input type="text" name="username" required>
+          </div>
+          <div class="form-group">
+            <label>Password *</label>
+            <input type="password" name="password" required>
+          </div>
+        </div>
+        <div style="margin-top:24px;">
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;">
+            Register Firm →
+          </button>
+        </div>
+      </form>
+      <div class="auth-link">
+        Already registered? <a href="{{ url_for('auth.login') }}">Login Here</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

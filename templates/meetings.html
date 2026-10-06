@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% set active='meetings' %}
+{% block title %}Meetings{% endblock %}
+{% block page_title %}🤝 Meetings & Video Conference{% endblock %}
+{% block content %}
+<div class="content-card">
+  <div class="card-header"><h3>Schedule Meeting</h3></div>
+  <div class="card-body">
+    <form method="POST" action="{{ url_for('meetings.add_meeting') }}">
+      <div class="form-grid">
+        <div class="form-group"><label>Title *</label><input type="text" name="meeting_title" required></div>
+        <div class="form-group"><label>Date *</label><input type="date" name="meeting_date" required></div>
+        <div class="form-group"><label>Time *</label><input type="time" name="meeting_time" required></div>
+        <div class="form-group"><label>Venue</label><input type="text" name="venue" placeholder="e.g. Clubhouse / Online"></div>
+        <div class="form-group form-full"><label>Video Meeting Link (Optional - Jitsi / Google Meet)</label>
+          <input type="url" name="video_link" placeholder="Leave empty for auto-generated Video Room link"></div>
+      </div>
+      <h4 style="margin:20px 0 12px;color:var(--primary);">Agenda Points</h4>
+      <div id="agenda-points-container">
+        <div class="agenda-point-row" style="display:flex;gap:10px;align-items:center;margin-bottom:10px;">
+          <span style="min-width:24px;font-weight:700;color:#1a237e;">1.</span>
+          <input type="text" name="agenda_point" placeholder="Agenda Point 1"
+            style="flex:1;padding:10px 14px;border:1.5px solid #e5e7eb;border-radius:8px;font-family:Poppins,sans-serif;font-size:13px;">
+        </div>
+      </div>
+      <button type="button" id="add-agenda-point" class="btn btn-outline btn-sm" style="margin-bottom:16px;">+ Add Point</button>
+      <div><button type="submit" class="btn btn-primary">Schedule Meeting</button></div>
+    </form>
+  </div>
+</div>
+
+{% if notices %}
+<div class="content-card">
+  <div class="card-header"><h3>📢 Notice Board & Online Meeting Links</h3></div>
+  <div class="card-body">
+    {% for n in notices %}
+    <div class="notice-card">
+      <div class="notice-title">{{ n.agenda_point|upper }}</div>
+      <div class="notice-meta">From: {{ n.meeting_title }} | Date: {{ n.meeting_date }}</div>
+      {% if n.video_link %}
+      <div style="margin-top:8px;">
+        <a href="{{ n.video_link }}" target="_blank" class="btn btn-accent btn-sm">🎥 Join Video Meeting</a>
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<div class="content-card">
+  <div class="card-header"><h3>All Meetings</h3></div>
+  <div class="card-body">
+    <table class="data-table">
+      <thead><tr><th>Title</th><th>Date</th><th>Time</th><th>Venue / Video Link</th><th>Action</th></tr></thead>
+      <tbody>
+      {% for m in meetings %}
+        <tr>
+          <td><strong>{{ m.meeting_title }}</strong></td>
+          <td>{{ m.meeting_date }}</td>
+          <td>{{ m.meeting_time }}</td>
+          <td>
+            {{ m.venue or 'Online' }}<br>
+            {% if m.video_link %}
+              <a href="{{ m.video_link }}" target="_blank" class="btn btn-accent btn-sm" style="margin-top:4px;">🎥 Join Call</a>
+            {% endif %}
+          </td>
+          <td><a href="{{ url_for('meetings.delete_meeting', mid=m.id) }}" class="btn btn-danger btn-sm delete-btn">Del</a></td>
+        </tr>
+      {% else %}
+        <tr><td colspan="5" style="text-align:center;color:var(--muted);">No meetings scheduled.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>SHARE CERTIFICATE – {{ member.name if member else 'Member' }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    body { background: white; font-family: 'Times New Roman', serif; }
+    .cert-box { max-width: 800px; margin: 20px auto; padding: 30px; border: 10px double #1a237e; text-align: center; }
+    .cert-header { font-size: 24px; font-weight: bold; text-transform: uppercase; color: #1a237e; }
+    .cert-subheader { font-size: 14px; margin-bottom: 20px; font-style: italic; }
+    .cert-body { font-size: 15px; line-height: 2; margin: 20px 0; text-align: justify; }
+    .cert-details { display: flex; justify-content: space-between; margin: 20px 0; font-size: 14px; border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 10px 0; }
+  </style>
+</head>
+<body>
+<div class="no-print" style="text-align:center;padding:16px;">
+  <button onclick="window.print()" class="btn btn-primary">🖨 Print Share Certificate</button>
+  <a href="{{ url_for('registers.registers', type='Share') }}" class="btn btn-outline">← Back</a>
+</div>
+<div class="cert-box">
+  <div class="cert-header">SHARE CERTIFICATE</div>
+  <div class="cert-subheader">{{ society.society_name|upper }} LTD.<br>Reg No: {{ society.register_no or '-' }}</div>
+  <div class="cert-details">
+    <div><strong>Certificate No:</strong> {{ member.share_cert_no }}</div>
+    <div><strong>Flat No:</strong> {{ member.flat_no }}</div>
+    <div><strong>No. of Shares:</strong> 5 Shares (₹ 50/- each)</div>
+  </div>
+  <div class="cert-body">
+    This is to certify that <strong>Shri / Smt. {{ member.name }}</strong>
+    {% if member.joint_name %} and <strong>Shri / Smt. {{ member.joint_name }}</strong>{% endif %}
+    is/are the registered holder(s) of 5 (Five) fully paid-up shares of Rupees Fifty each, numbered from
+    <strong>101 to 105</strong> inclusive in <strong>{{ society.society_name }}</strong> subject to the Bye-Laws of the Society.
+  </div>
+  <div style="margin-top:50px;display:flex;justify-content:space-between;font-size:14px;font-weight:bold;">
+    <div>__________________<br>Member Signature</div>
+    <div>__________________<br>Secretary</div>
+    <div>__________________<br>Chairman</div>
+  </div>
+</div>
+</body>
+</html>

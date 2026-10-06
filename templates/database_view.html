@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% set active='database' %}
+{% block title %}Database Viewer{% endblock %}
+{% block page_title %}🗄️ SQLite Database Viewer (surekha.db){% endblock %}
+{% block content %}
+<div class="content-card" style="margin-bottom:20px;">
+  <div class="card-header"><h3>Select Table to View Live Data</h3></div>
+  <div class="card-body">
+    <div class="btn-group" style="flex-wrap:wrap;gap:8px;">
+      {% for t in tables %}
+        <a href="{{ url_for('database_view.database_view', table=t) }}"
+           class="btn btn-sm {% if t == selected_table %}btn-primary{% else %}btn-outline{% endif %}">
+          {{ t }} <span class="badge badge-info" style="margin-left:4px;">{{ table_counts[t] }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="content-card">
+  <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+    <h3>Table: <strong style="color:var(--primary)">{{ selected_table }}</strong> &nbsp;({{ rows|length }} Records)</h3>
+    {% if rows %}
+    <form method="POST" action="{{ url_for('database_view.delete_all_records', table=selected_table) }}" onsubmit="return confirm('⚠️ Delete ALL records from {{ selected_table }}? This cannot be undone!')">
+      <button type="submit" class="btn btn-danger btn-sm">🗑️ Delete All Records</button>
+    </form>
+    {% endif %}
+  </div>
+  <div class="card-body" style="overflow-x:auto;">
+    {% if rows %}
+    <table class="data-table">
+      <thead>
+        <tr>
+          {% for col in columns %}<th>{{ col }}</th>{% endfor %}
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in rows %}
+          <tr>
+            {% for col in columns %}
+              <td>
+                {% if col.lower() == 'password' %}
+                  <span style="letter-spacing:2px;font-weight:700;color:var(--primary)">••••••••</span>
+                {% else %}
+                  {{ r[col] if r[col] is not none else '-' }}
+                {% endif %}
+              </td>
+            {% endfor %}
+            <td>
+              <a href="{{ url_for('database_view.delete_record', table=selected_table, row_id=r['id']) }}"
+                 class="btn btn-danger btn-sm delete-btn">Del</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">🗄️</div>
+        <p>No records found in table <strong>{{ selected_table }}</strong>.</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

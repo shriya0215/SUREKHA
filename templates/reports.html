@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% set active='reports' %}
+{% block title %}Reports{% endblock %}
+{% block page_title %}📈 Reports{% endblock %}
+{% block content %}
+<div class="content-card">
+  <div class="card-header"><h3>Members Outstanding</h3></div>
+  <div class="card-body">
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Flat</th><th>Mobile</th><th>Unpaid Bills</th><th>Total Due</th></tr></thead>
+      <tbody>
+      {% for o in outstanding %}
+        <tr><td>{{ o.name }}</td><td>{{ o.flat_no }}</td><td>{{ o.mobile }}</td>
+          <td><span class="badge badge-danger">{{ o.unpaid_count }}</span></td>
+          <td><strong style="color:var(--error)">₹{{ "%.2f"|format(o.total_due) }}</strong></td></tr>
+      {% else %}<tr><td colspan="5" style="text-align:center;color:var(--success);">🎉 All members paid!</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="content-card">
+  <div class="card-header"><h3>Member Details</h3></div>
+  <div class="card-body">
+    <table class="data-table">
+      <thead><tr><th>Flat</th><th>Name</th><th>Type</th><th>Share Cert</th><th>Mobile</th><th>Email</th><th>Nomination</th></tr></thead>
+      <tbody>
+      {% for m in all_members %}
+        <tr><td><strong>{{ m.flat_no }}</strong></td><td>{{ m.name }}{% if m.joint_name %} / {{ m.joint_name }}{% endif %}</td>
+          <td>{{ m.member_type }}</td><td>{{ m.share_cert_no }}</td><td>{{ m.mobile }}</td>
+          <td>{{ m.email or '-' }}</td><td>{{ m.nomination or '-' }}</td></tr>
+      {% else %}<tr><td colspan="7" style="text-align:center;color:var(--muted);">No members.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

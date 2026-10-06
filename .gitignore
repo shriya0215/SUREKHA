@@ -1,0 +1,23 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+*.zip
+*.tar.gz
+
+# Temporary / Log files
+server_log.txt
+*.log
+
+# Editor configurations
+.vscode/
+.idea/
+
+# Large generated report documents (keep source files on GitHub)
+*.docx
+
+# OS specific
+.DS_Store
+Thumbs.db

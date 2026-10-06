@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% set active='cashbank' %}
+{% block title %}Cash / Bank{% endblock %}
+{% block page_title %}💰 Cash / Bank Counter{% endblock %}
+{% block content %}
+<div class="btn-group" style="margin-bottom:20px;">
+  <a href="{{ url_for('entries.cash_bank', type='Cash') }}" class="btn btn-sm {% if account_type=='Cash' %}btn-primary{% else %}btn-outline{% endif %}">Cash</a>
+  <a href="{{ url_for('entries.cash_bank', type='Bank') }}" class="btn btn-sm {% if account_type=='Bank' %}btn-primary{% else %}btn-outline{% endif %}">Bank</a>
+</div>
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-icon {% if balance>=0 %}green{% else %}red{% endif %}">💰</div>
+    <div class="stat-info"><div class="stat-value">₹{{ "%.2f"|format(balance) }}</div>
+      <div class="stat-label">{{ account_type }} Balance</div></div>
+  </div>
+</div>
+<div class="content-card">
+  <div class="card-header"><h3>New Entry</h3></div>
+  <div class="card-body">
+    <form method="POST">
+      <input type="hidden" name="account_type" value="{{ account_type }}">
+      <div class="form-grid">
+        <div class="form-group"><label>Date *</label><input type="date" name="entry_date" required></div>
+        <div class="form-group"><label>Particulars *</label><input type="text" name="particulars" required></div>
+        <div class="form-group"><label>Debit (In)</label><input type="number" name="debit" step="0.01" value="0"></div>
+        <div class="form-group"><label>Credit (Out)</label><input type="number" name="credit" step="0.01" value="0"></div>
+        <div class="form-group"><label>Narration</label><input type="text" name="narration"></div>
+      </div>
+      <div style="margin-top:16px;"><button type="submit" class="btn btn-primary">Save</button></div>
+    </form>
+  </div>
+</div>
+<div class="content-card">
+  <div class="card-header"><h3>{{ account_type }} Entries</h3></div>
+  <div class="card-body">
+    <table class="data-table">
+      <thead><tr><th>Date</th><th>Particulars</th><th>Debit</th><th>Credit</th><th>Balance</th></tr></thead>
+      <tbody>
+      {% for e in entries %}
+        <tr><td>{{ e.entry_date }}</td><td>{{ e.particulars }}</td>
+          <td style="color:var(--success)">{{ "%.2f"|format(e.debit) if e.debit else '-' }}</td>
+          <td style="color:var(--error)">{{ "%.2f"|format(e.credit) if e.credit else '-' }}</td>
+          <td><strong>₹{{ "%.2f"|format(e.balance) }}</strong></td></tr>
+      {% else %}<tr><td colspan="5" style="text-align:center;color:var(--muted);">No entries.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

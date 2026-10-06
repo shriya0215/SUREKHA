@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUREKHA – {% block title %}Dashboard{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-name">SURE<span>KHA</span></div>
+    <div class="logo-sub">Society Management</div>
+  </div>
+  {% if session.get('society_name') %}
+  <div class="society-badge">
+    <div class="bl">Active Society</div>
+    <div class="bn">{{ session.society_name }}</div>
+  </div>
+  {% endif %}
+  <nav class="sidebar-nav">
+    <div class="nav-sec">Main</div>
+    <a href="{{ url_for('auth.dashboard') }}" class="{% if active=='home' %}active{% endif %}"><span class="ni">🏠</span>Dashboard</a>
+    <a href="{{ url_for('society.societies') }}" class="{% if active=='society' %}active{% endif %}"><span class="ni">🏢</span>Societies</a>
+    {% if session.get('society_id') %}
+    <div class="nav-sec">Manage</div>
+    <a href="{{ url_for('members.ij_share_forms') }}" class="{% if active=='ij' %}active{% endif %}"><span class="ni">📋</span>I,J,Share Forms</a>
+    <a href="{{ url_for('members.members') }}" class="{% if active=='members' %}active{% endif %}"><span class="ni">👥</span>Members</a>
+    <div class="nav-sec">Entries</div>
+    <a href="{{ url_for('entries.receipt') }}" class="sub {% if active=='receipt' %}active{% endif %}">📥 Receipt</a>
+    <a href="{{ url_for('entries.payment') }}" class="sub {% if active=='payment' %}active{% endif %}">📤 Payment</a>
+    <a href="{{ url_for('entries.journal') }}" class="sub {% if active=='journal' %}active{% endif %}">📓 Journal</a>
+    <a href="{{ url_for('entries.ledger') }}" class="sub {% if active=='ledger' %}active{% endif %}">📒 Ledger</a>
+    <a href="{{ url_for('entries.cash_bank') }}" class="sub {% if active=='cashbank' %}active{% endif %}">💰 Cash/Bank</a>
+    <div class="nav-sec">Finance</div>
+    <a href="{{ url_for('billing.billing') }}" class="{% if active=='billing' %}active{% endif %}"><span class="ni">🧾</span>Billing</a>
+    <a href="{{ url_for('accounts.accounts') }}" class="{% if active=='accounts' %}active{% endif %}"><span class="ni">📊</span>Accounts</a>
+    <div class="nav-sec">View</div>
+    <a href="{{ url_for('reports.reports') }}" class="{% if active=='reports' %}active{% endif %}"><span class="ni">📈</span>Reports</a>
+    <a href="{{ url_for('registers.registers') }}" class="{% if active=='registers' %}active{% endif %}"><span class="ni">📁</span>Registers</a>
+    <a href="{{ url_for('meetings.meetings') }}" class="{% if active=='meetings' %}active{% endif %}"><span class="ni">🤝</span>Meetings</a>
+    {% endif %}
+    <div class="nav-sec">System</div>
+    <a href="{{ url_for('database_view.database_view') }}" class="{% if active=='database' %}active{% endif %}"><span class="ni">🗄️</span>Database Viewer</a>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="{{ url_for('auth.logout') }}">🚪 Logout</a>
+  </div>
+</div>
+<div class="main-wrap">
+  <div class="topbar">
+    <div class="topbar-title">{% block page_title %}Dashboard{% endblock %}</div>
+    <div class="firm-chip">{{ session.get('firm_name','SUREKHA') }}</div>
+  </div>
+  <div class="page-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

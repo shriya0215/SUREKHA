@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Receipt – {{ r.sno }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head><body>
+<div class="no-print" style="text-align:center;padding:16px;">
+  <button onclick="window.print()" class="btn btn-primary">🖨 Print</button>
+  <a href="{{ url_for('entries.receipt') }}" class="btn btn-outline">← Back</a>
+</div>
+<div class="print-container">
+  <div class="print-header">
+    <h1>RECEIPT</h1>
+    <p style="text-align:right"><strong>{{ r.society_name }} Ltd.</strong></p>
+  </div>
+  <p><strong>S. No.:</strong> {{ r.sno }} &emsp; <strong>Date:</strong> {{ r.receipt_date }}</p>
+  <p><strong>Received from Shri/Shrimati/Ms.:</strong> {{ r.received_from }}</p>
+  <p><strong>Flat/Garage/Shop No.:</strong> {{ r.flat_no }} &emsp; <strong>Building No.:</strong> {{ r.building_no }}</p>
+  <table class="print-table">
+    <tr><th>Sr.</th><th>Particulars</th><th style="text-align:right">Amount (₹)</th></tr>
+    {% set labels = ['Entrance Fees','Shares','Deposits','Loan Installments','Interest on Loan',
+      'Interest on Defaulted Dues','Contribution towards Construction','Lease Rent',
+      'Municipal Taxes','Water Charges','Electricity Charges','Parking Charges',
+      'Lift Charges','Sinking Fund','Service Charges','Insurance',
+      'Suspense towards Share Capital & Entrance Fees','Donations','Miscellaneous'] %}
+    {% for key in items %}
+    <tr><td>{{ loop.index }}</td><td>{{ labels[loop.index0] }}</td>
+      <td style="text-align:right">{{ "%.2f"|format(r[key]) if r[key] else '' }}</td></tr>
+    {% endfor %}
+    <tr class="print-total"><td colspan="2" style="text-align:right"><strong>TOTAL</strong></td>
+      <td style="text-align:right"><strong>₹ {{ "%.2f"|format(r.total) }}</strong></td></tr>
+  </table>
+  <p style="margin-top:12px;"><strong>Rupees (in Words):</strong> {{ r.total|int }} </p>
+  <p><strong>In {{ r.payment_mode }}</strong></p>
+  <div style="text-align:right;margin-top:30px;"><strong>Hon. Secretary / Treasurer</strong></div>
+</div>
+</body></html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Bill – {{ bill.bill_no }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head><body>
+<div class="no-print" style="text-align:center;padding:16px;">
+  <button onclick="window.print()" class="btn btn-primary">🖨 Print Bill</button>
+  <a href="{{ url_for('billing.billing') }}" class="btn btn-outline">← Back</a>
+</div>
+<div class="print-container">
+  <div class="print-header">
+    <h1>{{ bill.society_name }}</h1>
+    <p>{{ bill.address or '' }}</p>
+    <p>Registration No: {{ bill.register_no or '-' }}</p>
+  </div>
+  <table class="print-table" style="margin-bottom:8px;">
+    <tr><th>Bill No.</th><th>Bill Date</th><th>Flat No.</th><th>Due Date</th></tr>
+    <tr><td>{{ bill.bill_no }}</td><td>{{ bill.bill_date }}</td><td>{{ bill.flat_no }}</td><td>{{ bill.due_date }}</td></tr>
+  </table>
+  <p><strong>Period:</strong> {{ bill.period_from }} to {{ bill.period_to }}</p>
+  <p><strong>Name:</strong> {{ bill.name }}</p>
+  <table class="print-table">
+    <tr><th>Sr.</th><th>Description</th><th style="text-align:right">Amount</th></tr>
+    <tr><td>1</td><td>All Municipal Dues</td><td style="text-align:right">{{ "%.2f"|format(bill.municipal_dues) }}</td></tr>
+    <tr><td>2</td><td>Administrative and General Expenses</td><td style="text-align:right">{{ "%.2f"|format(bill.admin_expenses) }}</td></tr>
+    <tr><td>3</td><td>Sinking Funds</td><td style="text-align:right">{{ "%.2f"|format(bill.sinking_funds) }}</td></tr>
+    <tr><td>4</td><td>Periodic Building Maintenance</td><td style="text-align:right">{{ "%.2f"|format(bill.periodic_maintenance) }}</td></tr>
+    <tr><td>5</td><td>Common Area Utilisation / Parking</td><td style="text-align:right">{{ "%.2f"|format(bill.parking) }}</td></tr>
+    <tr><td>6</td><td>Non Occupancy Charges / Miscellaneous</td><td style="text-align:right">{{ "%.2f"|format(bill.noc_misc) }}</td></tr>
+    <tr><td>7</td><td>Past Arrears of Contribution</td><td style="text-align:right">{{ "%.2f"|format(bill.past_arrears) }}</td></tr>
+    <tr><td>8</td><td>Interest Due</td><td style="text-align:right">{{ "%.2f"|format(bill.interest_due) }}</td></tr>
+    <tr class="print-total"><td colspan="2" style="text-align:right">Total Payable</td>
+      <td style="text-align:right">₹ {{ "%.2f"|format(bill.total_payable) }}</td></tr>
+  </table>
+  <p style="margin-top:12px;"><strong>Amount In Words:</strong> {{ words }}</p>
+  <div class="print-footer">
+    <p><strong>Notes:</strong></p>
+    <p>• Cheque should be drawn in favour of society only</p>
+    <p>• Interest @ {{ bill.rate_of_interest }}% pa will be charged for delayed payments</p>
+    <p>• Please mention Bill No. and Flat No. on backside of cheque</p>
+    <div style="text-align:right;margin-top:30px;"><strong>Hon. Secretary / Treasurer</strong></div>
+  </div>
+</div>
+</body></html>

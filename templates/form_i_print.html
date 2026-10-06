@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>FORM I – Register of Members</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    body { background: white; font-family: Arial, sans-serif; }
+    .form-box { max-width: 950px; margin: 20px auto; padding: 20px; border: 2px solid #000; }
+    .form-title { text-align: center; text-transform: uppercase; font-weight: bold; font-size: 18px; }
+    .sub-title { text-align: center; font-size: 13px; margin-bottom: 15px; }
+    table.form-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    table.form-table th, table.form-table td { border: 1px solid #000; padding: 6px 8px; font-size: 11px; text-align: left; }
+    table.form-table th { background: #f0f0f0; text-align: center; }
+  </style>
+</head>
+<body>
+<div class="no-print" style="text-align:center;padding:16px;">
+  <button onclick="window.print()" class="btn btn-primary">🖨 Print Form I</button>
+  <a href="{{ url_for('registers.registers', type='I') }}" class="btn btn-outline">← Back</a>
+</div>
+<div class="form-box">
+  <div class="form-title">FORM I</div>
+  <div class="sub-title">[See Rule 32 of Maharashtra Co-operative Societies Rules, 1961]<br>
+    <strong>REGISTER OF MEMBERS OF {{ society.society_name|upper }} LTD.</strong><br>
+    Registration No: {{ society.register_no or '-' }}
+  </div>
+  <table class="form-table">
+    <thead>
+      <tr>
+        <th>Sr. No.</th>
+        <th>Full Name of Member</th>
+        <th>Address / Flat No.</th>
+        <th>Date of Admission</th>
+        <th>No. of Shares Held</th>
+        <th>Share Cert. No.</th>
+        <th>Nominee Name</th>
+        <th>Date of Cessation</th>
+        <th>Remarks</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in members %}
+      <tr>
+        <td style="text-align:center">{{ loop.index }}</td>
+        <td><strong>{{ m.name }}</strong>{% if m.joint_name %}<br>(Joint: {{ m.joint_name }}){% endif %}</td>
+        <td>Flat No. {{ m.flat_no }}{% if m.building_no %}, Bldg {{ m.building_no }}{% endif %}</td>
+        <td>{{ m.created_at or '-' }}</td>
+        <td style="text-align:center">5</td>
+        <td style="text-align:center">{{ m.share_cert_no }}</td>
+        <td>{{ m.nomination or '-' }}</td>
+        <td>-</td>
+        <td>Active</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="9" style="text-align:center">No members found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div style="margin-top:40px;display:flex;justify-content:space-between;font-size:12px;">
+    <div>Date: ____________</div>
+    <div>Chairman / Secretary Signature</div>
+  </div>
+</div>
+</body>
+</html>

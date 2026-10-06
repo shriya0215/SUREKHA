@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+:root {
+  --primary:#1a237e; --primary-l:#283593; --accent:#f9a825; --accent-l:#fdd835;
+  --bg:#f0f2f5; --white:#fff; --sidebar-w:240px;
+  --text:#1c1c2e; --muted:#6b7280; --border:#e5e7eb;
+  --success:#16a34a; --error:#dc2626; --warn:#f59e0b;
+  --shadow:0 2px 12px rgba(26,35,126,.10); --radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);font-size:14px;}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-thumb{background:rgba(26,35,126,.25);border-radius:3px;}
+.flash-messages{margin-bottom:20px;}
+.flash{padding:12px 18px;border-radius:8px;font-size:13px;font-weight:500;
+  margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.flash.success{background:#dcfce7;color:var(--success);border-left:4px solid var(--success);}
+.flash.error{background:#fee2e2;color:var(--error);border-left:4px solid var(--error);}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge-success{background:#dcfce7;color:var(--success);}
+.badge-danger{background:#fee2e2;color:var(--error);}
+.badge-warning{background:#fef3c7;color:var(--warn);}
+.badge-info{background:#dbeafe;color:#1d4ed8;}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty-state .empty-icon{font-size:48px;margin-bottom:12px;}

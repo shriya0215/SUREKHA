@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% set active='accounts' %}
+{% block title %}Accounts{% endblock %}
+{% block page_title %}📊 Accounts{% endblock %}
+{% block content %}
+<div class="stat-grid">
+  <div class="stat-card"><div class="stat-icon green">📥</div>
+    <div class="stat-info"><div class="stat-value">₹{{ "%.2f"|format(income) }}</div><div class="stat-label">Total Income</div></div></div>
+  <div class="stat-card"><div class="stat-icon red">📤</div>
+    <div class="stat-info"><div class="stat-value">₹{{ "%.2f"|format(expense) }}</div><div class="stat-label">Total Expenditure</div></div></div>
+  <div class="stat-card"><div class="stat-icon {% if surplus>=0 %}gold{% else %}red{% endif %}">💰</div>
+    <div class="stat-info"><div class="stat-value">₹{{ "%.2f"|format(surplus) }}</div><div class="stat-label">{% if surplus>=0 %}Surplus{% else %}Deficit{% endif %}</div></div></div>
+</div>
+<div class="content-card">
+  <div class="card-header"><h3>Income (Receipts)</h3></div>
+  <div class="card-body">
+    <table class="data-table">
+      <thead><tr><th>Date</th><th>From</th><th>Amount</th></tr></thead>
+      <tbody>
+      {% for r in receipts %}
+        <tr><td>{{ r.receipt_date }}</td><td>{{ r.received_from }}</td><td>₹{{ "%.2f"|format(r.total) }}</td></tr>
+      {% else %}<tr><td colspan="3" style="text-align:center;color:var(--muted);">No income data.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="content-card">
+  <div class="card-header"><h3>Expenditure (Payments)</h3></div>
+  <div class="card-body">
+    <table class="data-table">
+      <thead><tr><th>Date</th><th>Payee</th><th>Particulars</th><th>Amount</th></tr></thead>
+      <tbody>
+      {% for p in payments %}
+        <tr><td>{{ p.payment_date }}</td><td>{{ p.payee_name }}</td><td>{{ p.particulars }}</td><td>₹{{ "%.2f"|format(p.amount) }}</td></tr>
+      {% else %}<tr><td colspan="4" style="text-align:center;color:var(--muted);">No expenses.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

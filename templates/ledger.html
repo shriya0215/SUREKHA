@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% set active='ledger' %}
+{% block title %}Ledger{% endblock %}
+{% block page_title %}📒 Ledger{% endblock %}
+{% block content %}
+<div class="content-card">
+  <div class="card-header">
+    <h3>Account: {{ current_account }}</h3>
+    <div class="btn-group">
+      {% for a in accounts %}
+        <a href="{{ url_for('entries.ledger', account=a.account_name) }}" class="btn btn-sm {% if a.account_name==current_account %}btn-primary{% else %}btn-outline{% endif %}">{{ a.account_name }}</a>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="card-body">
+    <table class="data-table">
+      <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Balance</th><th>Narration</th><th>Ref</th></tr></thead>
+      <tbody>
+      {% for e in entries %}
+        <tr><td>{{ e.entry_date }}</td>
+          <td><span class="badge {% if e.entry_type=='Debit' %}badge-success{% else %}badge-danger{% endif %}">{{ e.entry_type }}</span></td>
+          <td>₹{{ "%.2f"|format(e.amount) }}</td><td><strong>₹{{ "%.2f"|format(e.balance) }}</strong></td>
+          <td>{{ e.narration or '-' }}</td><td>{{ e.ref_type or '-' }}</td></tr>
+      {% else %}<tr><td colspan="6" style="text-align:center;color:var(--muted);">No entries.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
